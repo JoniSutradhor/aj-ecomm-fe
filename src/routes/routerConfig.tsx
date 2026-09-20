@@ -6,6 +6,9 @@ import PageLoader from './components/PageLoader';
 import routes from './index';
 
 const MainLayout = SuspensedComponent(React.lazy(() => import('layouts/Main')));
+const StorefrontLayout = SuspensedComponent(
+    React.lazy(() => import('layouts/Storefront'))
+);
 const DashboardLayout = SuspensedComponent(
     React.lazy(() => import('layouts/Dashboard'))
 );
@@ -14,6 +17,15 @@ const AppRoot = SuspensedComponent(
 );
 
 const Home = PageLoader(React.lazy(() => import('pages/Home')));
+const Shop = PageLoader(React.lazy(() => import('pages/Shop')));
+const ProductDetail = PageLoader(
+    React.lazy(() => import('pages/ProductDetail'))
+);
+const Cart = PageLoader(React.lazy(() => import('pages/Cart')));
+const Checkout = PageLoader(React.lazy(() => import('pages/Checkout')));
+const OrderTrack = PageLoader(React.lazy(() => import('pages/OrderTrack')));
+const MyOrders = PageLoader(React.lazy(() => import('pages/MyOrders')));
+const Register = PageLoader(React.lazy(() => import('pages/Register')));
 const Login = PageLoader(React.lazy(() => import('pages/Login')));
 const Dashboard = PageLoader(React.lazy(() => import('pages/Dashboard')));
 const Products = PageLoader(React.lazy(() => import('pages/Products')));
@@ -27,8 +39,43 @@ const routesConfig = [
         Component: AppRoot,
         children: [
             {
-                path: routes.home.path,
-                element: <Home />,
+                // Public storefront
+                Component: StorefrontLayout,
+                children: [
+                    {
+                        path: routes.home.path,
+                        element: <Home />,
+                    },
+                    {
+                        path: routes.shop.path,
+                        element: <Shop />,
+                    },
+                    {
+                        path: routes.product.path,
+                        element: <ProductDetail />,
+                    },
+                    {
+                        path: routes.cart.path,
+                        element: <Cart />,
+                    },
+                    {
+                        path: routes.checkout.path,
+                        element: <Checkout />,
+                    },
+                    {
+                        path: routes.orderTrack.path,
+                        element: <OrderTrack />,
+                    },
+                    {
+                        // Any signed in customer (admins too)
+                        path: routes.myOrders.path,
+                        element: (
+                            <AuthGuard>
+                                <MyOrders />
+                            </AuthGuard>
+                        ),
+                    },
+                ],
             },
             {
                 // Admin area, administrators only
@@ -70,6 +117,10 @@ const routesConfig = [
                     {
                         path: routes.login.path,
                         element: <Login />,
+                    },
+                    {
+                        path: routes.register.path,
+                        element: <Register />,
                     },
                     {
                         path: routes.notFound404.path,

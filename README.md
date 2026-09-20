@@ -59,6 +59,23 @@ VITE_CURRENCY=USD
 
 `eslint` + `prettier` - lint and formatting
 
+## Storefront
+
+Public pages, inside `layouts/Storefront` (header with search, cart and sign in, footer). They use the public `/api/store/*` endpoints, which only return active products.
+
+| Route             | Page                  | What it does                                                                      |
+| ----------------- | --------------------- | --------------------------------------------------------------------------------- |
+| `/`               | `pages/Home`          | Hero, shop by category, new arrivals                                              |
+| `/shop`           | `pages/Shop`          | Product grid: search, category, sort, paging (12 per page, in the url)            |
+| `/products/:slug` | `pages/ProductDetail` | Gallery, price / sale, stock, quantity, add to cart                               |
+| `/cart`           | `pages/Cart`          | Line items, quantity, remove, subtotal                                            |
+| `/checkout`       | `pages/Checkout`      | Delivery form (prefilled when signed in), summary, place order (cash on delivery) |
+| `/orders/track`   | `pages/OrderTrack`    | Thank you page after checkout, or look up an order by number + email              |
+| `/account/orders` | `pages/MyOrders`      | Signed in customers: their orders, cancel a pending order                         |
+| `/register`       | `pages/Register`      | Customer sign up (login is `/login`)                                              |
+
+The cart is the `store/cart` Redux slice, saved in `localStorage` (`aj_cart`). Items are snapshots (name, price, stock when added), quantity never goes above that stock. Checkout works for guests and signed in customers. `utils/orderLimits.ts` mirrors the api validation limits (99 per line, 50 lines, field lengths, password 8-72) so the UI never sends something the api rejects. The client never sends prices, the api re-prices and re-checks stock at checkout.
+
 ## Admin area
 
 Everything under `/admin` is for administrators only (`AuthGuard` with `roles`), inside `layouts/Dashboard` (sidebar + top bar).

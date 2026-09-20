@@ -2,10 +2,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { isDevelopment } from 'utils/environment';
 import appSettings from './appSettings';
 import authUser from './authUser';
+import cart from './cart';
 
 const rootReducer = combineReducers({
     appSettings,
     authUser,
+    cart,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

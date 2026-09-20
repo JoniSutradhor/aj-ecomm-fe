@@ -37,8 +37,8 @@ export class Route {
         this.keywords = keywords;
     }
 
-    pathWithId(id: string | number) {
-        return pathWithId(this.path, id);
+    pathWithId(id: string | number, param = 'id') {
+        return pathWithId(this.path, id, param);
     }
 
     toString() {
@@ -56,6 +56,41 @@ const routes = {
         path: '/',
         icon: null,
         title: 'Home',
+    }),
+    shop: new Route({
+        path: '/shop',
+        icon: null,
+        title: 'Shop',
+    }),
+    product: new Route({
+        path: '/products/:slug',
+        icon: null,
+        title: 'Product',
+    }),
+    cart: new Route({
+        path: '/cart',
+        icon: null,
+        title: 'Cart',
+    }),
+    checkout: new Route({
+        path: '/checkout',
+        icon: null,
+        title: 'Checkout',
+    }),
+    orderTrack: new Route({
+        path: '/orders/track',
+        icon: null,
+        title: 'Track order',
+    }),
+    myOrders: new Route({
+        path: '/account/orders',
+        icon: null,
+        title: 'My orders',
+    }),
+    register: new Route({
+        path: '/register',
+        icon: null,
+        title: 'Create account',
     }),
     login: new Route({
         path: '/login',

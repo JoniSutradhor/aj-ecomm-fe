@@ -11,7 +11,7 @@ import {
     Link,
     Typography,
 } from '@mui/material';
-import { login } from 'api/ajApiAuthUser';
+import { register } from 'api/ajApiAuthUser';
 import InputFieldController from 'components/InputFieldController';
 import MessageCard from 'components/MessageCard';
 import VisibilityIcon from 'icons/VisibilityIcon';
@@ -20,29 +20,48 @@ import useAuthUser from 'hooks/useAuthUser';
 import useHookForm from 'hooks/useHookForm';
 import routes from 'routes/index';
 import { setNewAuthData } from 'store/authUser/actions';
-import { UserRoleEnum } from 'types/user';
+import { REGISTER_LIMITS } from 'utils/orderLimits';
 import { addTestIds } from 'utils/testids';
 import { zRequired, zValidEmail } from 'utils/z';
 
 const TESTIDS = {
-    EMAIL: 'login-email',
-    PASSWORD: 'login-password',
-    SUBMIT: 'login-submit',
-    ERROR: 'login-error',
+    FIRST_NAME: 'register-first-name',
+    LAST_NAME: 'register-last-name',
+    EMAIL: 'register-email',
+    PASSWORD: 'register-password',
+    SUBMIT: 'register-submit',
+    ERROR: 'register-error',
 };
 
+// Same rules as the api (`RegisterDto`)
 const formSchema = z.object({
+    fname: zRequired(),
+    lname: zRequired(),
     email: zValidEmail(),
-    password: zRequired(),
+    password: z
+        .string()
+        .min(
+            REGISTER_LIMITS.passwordMin,
+            `At least ${REGISTER_LIMITS.passwordMin} characters`
+        )
+        .max(
+            REGISTER_LIMITS.passwordMax,
+            `Maximum ${REGISTER_LIMITS.passwordMax} characters`
+        ),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const initialValues: FormValues = { email: '', password: '' };
+const initialValues: FormValues = {
+    fname: '',
+    lname: '',
+    email: '',
+    password: '',
+};
 
-const Login = () => {
+const Register = () => {
     const location = useLocation();
-    const { isAuthenticated, isRole } = useAuthUser();
+    const { isAuthenticated } = useAuthUser();
     const [showPassword, setShowPassword] = useState(false);
     const [submitError, setSubmitError] = useState('');
 
@@ -57,7 +76,7 @@ const Login = () => {
         onSubmit: async (values) => {
             setSubmitError('');
             try {
-                const { user, token } = await login(values);
+                const { user, token } = await register(values);
                 setNewAuthData({ user, token });
             } catch (error) {
                 setSubmitError((error as Error).message);
@@ -68,21 +87,19 @@ const Login = () => {
     if (isAuthenticated) {
         const from = (location.state as { from?: { pathname: string } } | null)
             ?.from?.pathname;
-        const home = isRole(UserRoleEnum.ADMIN)
-            ? routes.admin.path
-            : routes.home.path;
-        return <Navigate to={from || home} replace />;
+        return <Navigate to={from || routes.home.path} replace />;
     }
 
     return (
         <Card>
-            <title>Sign in | AJ</title>
+            <title>Create account | AJ</title>
             <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
                 <Typography variant="h2" component="h1" gutterBottom>
-                    Sign in
+                    Create account
                 </Typography>
                 <Typography variant="text2" color="textSecondary">
-                    Sign in to your account.
+                    Keep track of your orders. You can also check out as a
+                    guest.
                 </Typography>
                 <Box
                     component="form"
@@ -100,14 +117,42 @@ const Login = () => {
                             {submitError}
                         </MessageCard>
                     )}
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gap: 2,
+                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                        }}
+                    >
+                        <InputFieldController
+                            control={control}
+                            name="fname"
+                            label="First name"
+                            autoComplete="given-name"
+                            slotProps={{
+                                htmlInput: {
+                                    'data-testid': TESTIDS.FIRST_NAME,
+                                },
+                            }}
+                        />
+                        <InputFieldController
+                            control={control}
+                            name="lname"
+                            label="Last name"
+                            autoComplete="family-name"
+                            slotProps={{
+                                htmlInput: {
+                                    'data-testid': TESTIDS.LAST_NAME,
+                                },
+                            }}
+                        />
+                    </Box>
                     <InputFieldController
                         control={control}
                         name="email"
                         label="Email"
                         type="email"
                         autoComplete="username"
-                        // eslint-disable-next-line jsx-a11y/no-autofocus
-                        autoFocus
                         slotProps={{
                             htmlInput: { 'data-testid': TESTIDS.EMAIL },
                         }}
@@ -117,7 +162,7 @@ const Login = () => {
                         name="password"
                         label="Password"
                         type={showPassword ? 'text' : 'password'}
-                        autoComplete="current-password"
+                        autoComplete="new-password"
                         slotProps={{
                             htmlInput: { 'data-testid': TESTIDS.PASSWORD },
                             input: {
@@ -154,12 +199,12 @@ const Login = () => {
                         size="large"
                         loading={isSubmitting}
                     >
-                        Sign in
+                        Create account
                     </Button>
                     <Typography variant="text2" sx={{ textAlign: 'center' }}>
-                        {'New here? '}
-                        <Link component={RouterLink} to={routes.register.path}>
-                            Create an account
+                        {'Already have an account? '}
+                        <Link component={RouterLink} to={routes.login.path}>
+                            Sign in
                         </Link>
                     </Typography>
                 </Box>
@@ -168,4 +213,4 @@ const Login = () => {
     );
 };
 
-export default addTestIds(Login, TESTIDS);
+export default addTestIds(Register, TESTIDS);

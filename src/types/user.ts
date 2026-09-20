@@ -21,6 +21,11 @@ export interface LoginFieldsType {
     password: string;
 }
 
+export interface RegisterFieldsType extends LoginFieldsType {
+    fname: string;
+    lname: string;
+}
+
 export interface LoginResponseType {
     user: UserObjectType;
     token: string;
