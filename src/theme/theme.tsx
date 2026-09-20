@@ -58,6 +58,22 @@ export const CUSTOM_COLORS = {
     grey300: '#d6d6d6',
     grey200: '#ebebeb',
     grey100: '#f8f8f8',
+    // Brand (interactive elements, links, selected navigation)
+    brand50: '#eef2ff',
+    brand100: '#e0e7ff',
+    brand500: '#6366f1',
+    brand600: '#4f46e5',
+    brand700: '#4338ca',
+    // Status colors (light 50 for backgrounds, 600 / 700 for text and icons)
+    success50: '#ecfdf5',
+    success600: '#059669',
+    success700: '#047857',
+    warning50: '#fffbeb',
+    warning600: '#d97706',
+    warning700: '#b45309',
+    danger50: '#fef2f2',
+    danger600: '#dc2626',
+    danger700: '#b91c1c',
 };
 
 export type CustomColorName = keyof typeof CUSTOM_COLORS;
@@ -127,15 +143,57 @@ const theme = {
             lineHeight: 16 / 10,
             fontFamily: 'var(--font-family-body)',
         },
+        // MUI components use these internally, keep them in line with text1 / text2
+        body1: {
+            fontSize: 16,
+            lineHeight: 24 / 16,
+        },
+        body2: {
+            fontSize: 14,
+            lineHeight: 20 / 14,
+        },
+        button: {
+            fontSize: 14,
+            fontWeight: 600,
+            textTransform: 'none' as const,
+        },
     },
     palette: {
         ...customPalette,
+        // Built in MUI colors map to the custom ones so default components match the brand
+        primary: {
+            main: CUSTOM_COLORS.brand600,
+            dark: CUSTOM_COLORS.brand700,
+            light: CUSTOM_COLORS.brand500,
+        },
+        error: {
+            main: CUSTOM_COLORS.danger600,
+            dark: CUSTOM_COLORS.danger700,
+        },
+        success: {
+            main: CUSTOM_COLORS.success600,
+            dark: CUSTOM_COLORS.success700,
+        },
+        warning: {
+            main: CUSTOM_COLORS.warning600,
+            dark: CUSTOM_COLORS.warning700,
+        },
+        text: {
+            primary: CUSTOM_COLORS.black,
+            secondary: CUSTOM_COLORS.grey900,
+        },
+        background: {
+            default: CUSTOM_COLORS.grey100,
+            paper: CUSTOM_COLORS.white,
+        },
+        divider: CUSTOM_COLORS.grey200,
     },
     breakpoints: {
         values: BREAKPOINTS,
     },
     aj: {
-        topbarHeight: 56,
+        topbarHeight: 64,
+        sidebarWidth: 256,
     },
 };
 
@@ -175,6 +233,34 @@ const themesOptions = {
                     root: {
                         backgroundImage: 'none',
                     },
+                },
+            },
+            MuiButton: {
+                defaultProps: { disableElevation: true },
+            },
+            MuiTextField: {
+                defaultProps: { size: 'small' as const, fullWidth: true },
+            },
+            MuiCard: {
+                defaultProps: { variant: 'outlined' as const },
+                styleOverrides: {
+                    root: { borderColor: CUSTOM_COLORS.grey200 },
+                },
+            },
+            MuiTableCell: {
+                styleOverrides: {
+                    root: { borderColor: CUSTOM_COLORS.grey200 },
+                    head: {
+                        backgroundColor: CUSTOM_COLORS.grey100,
+                        color: CUSTOM_COLORS.grey900,
+                        fontWeight: 600,
+                        whiteSpace: 'nowrap' as const,
+                    },
+                },
+            },
+            MuiChip: {
+                styleOverrides: {
+                    root: { fontWeight: 600 },
                 },
             },
         },
@@ -232,6 +318,7 @@ declare module '@mui/material/styles' {
     interface Theme {
         aj: {
             topbarHeight: number;
+            sidebarWidth: number;
         };
     }
 }

@@ -4,6 +4,8 @@ const config = {
     api_url: env.VITE_API_URL || '',
     api_timeout: Number(env.VITE_API_TIMEOUT) || 20000,
     default_language: env.VITE_DEFAULT_LANGUAGE || 'en',
+    // ISO 4217 code used to format prices
+    currency: env.VITE_CURRENCY || 'USD',
     dom_root_id: '__AJ_APP_ROOT__',
     asset_path: env.BASE_URL || '/',
 };

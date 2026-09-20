@@ -11,12 +11,17 @@ Differences from the reference:
 - Build tool is **Vite**. Ignore everything webpack / babel / storybook-webpack.
 - State is **Redux Toolkit**, not zustand. Keep the reference's `store/{slice}/{index,actions,selectors}.ts` layout.
 - Env vars are `VITE_*`, read only in `src/utils/config.ts`.
-- Not carried over on purpose: Paperturn translation service, Chargebee / Intercom / Amplitude, Paperturn API envelope, brand colors.
+- Not carried over on purpose: Paperturn translation service (UI strings are plain English), Chargebee / Intercom / Amplitude, Paperturn API envelope, brand colors.
+- Icons: `icons/*Icon.tsx` wrap `@mui/icons-material` (bundled, works offline) through `createIcon`, not Iconify.
+- The api pagination envelope is `{ items, total, page, limit }` (`types/pagination.ts`), the url uses `page` and `limit`.
 
 ## Conventions
 
 - Aliases are bare (`components/*`, `store/*`, ...) and live only in `tsconfig.app.json`. Use `store/index`, `routes/index` (a bare directory alias does not resolve).
-- Colors only from `CUSTOM_COLORS` in `theme/theme.tsx`; typography only `h1-h3`, `text1-text4`.
+- Colors only from `CUSTOM_COLORS` in `theme/theme.tsx` (greys, `brand*`, `success*`, `warning*`, `danger*`); typography only `h1-h3`, `text1-text4`.
+- MUI v9: `Typography` / `Link` have no `fontWeight` prop, use `sx={{ fontWeight: 600 }}`.
+- Forms: `useHookForm` + zod (`utils/z.ts`) + `InputFieldController`. Inputs hold strings, convert to numbers in `onSubmit`.
+- Data: `utils/hooks.ts` `createFetchHook` / `createFetchHookWithPagination`, one hook per resource in `hooks/`. Redux is only for auth and app settings.
 - No test cases for now (the user asked to skip them). Vitest is configured for later.
 - Logo / icons are the default Vite ones for now (`public/favicon.svg`); the user will replace them.
 - Run `npm run typecheck`, `npm run lint` and `npm run build` after changes.

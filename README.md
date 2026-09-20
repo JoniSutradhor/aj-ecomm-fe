@@ -9,6 +9,8 @@ The structure and conventions follow the reference product `paperturn_dashboard`
 
 # Development
 
+The api is `aj-ecomm-be` (NestJS + PostgreSQL), start it first. Sign in at `/login` with the admin account from the back end `.env` (`ADMIN_EMAIL` / `ADMIN_PASSWORD`).
+
 ```
 nvm use
 npm install
@@ -34,6 +36,7 @@ Only `VITE_*` variables are exposed to the app. They are read in one place: `src
 VITE_API_URL=http://localhost:8080/api
 VITE_API_TIMEOUT=20000
 VITE_DEFAULT_LANGUAGE=en
+VITE_CURRENCY=USD
 ```
 
 ## General
@@ -55,6 +58,20 @@ VITE_DEFAULT_LANGUAGE=en
 `sass` - CSS extension
 
 `eslint` + `prettier` - lint and formatting
+
+## Admin area
+
+Everything under `/admin` is for administrators only (`AuthGuard` with `roles`), inside `layouts/Dashboard` (sidebar + top bar).
+
+| Route                                        | Page                | What it does                                                                |
+| -------------------------------------------- | ------------------- | --------------------------------------------------------------------------- |
+| `/admin`                                     | `pages/Dashboard`   | Stock summary cards, products that need restocking                          |
+| `/admin/products`                            | `pages/Products`    | Product list: search, status / category / low stock filters, paging, delete |
+| `/admin/products/new`, `/admin/products/:id` | `pages/ProductEdit` | Create / edit form, images, stock card with recent changes                  |
+| `/admin/categories`                          | `pages/Categories`  | Category list, create / edit dialog, delete                                 |
+| `/admin/stock`                               | `pages/Stock`       | Stock levels with adjust dialog, and the full stock history                 |
+
+List filters and paging live in the url (`useFilterChange`, `useProductsFilter`), so they survive a reload and can be shared. Stock only changes through `components/StockAdjustDialog`, never by editing a product.
 
 ## Folder structure
 

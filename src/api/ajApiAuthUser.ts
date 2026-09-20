@@ -1,6 +1,12 @@
 import Requester from 'utils/requester';
-import { GetAuthDataResponseType } from 'types/user';
+import {
+    GetAuthDataResponseType,
+    LoginFieldsType,
+    LoginResponseType,
+} from 'types/user';
 
-// TODO: adjust the endpoint to the real backend contract
 export const getAuthData = (): Promise<GetAuthDataResponseType> =>
     Requester.get<GetAuthDataResponseType>('/auth/session');
+
+export const login = (fields: LoginFieldsType): Promise<LoginResponseType> =>
+    Requester.post<LoginResponseType>('/auth/login', fields);

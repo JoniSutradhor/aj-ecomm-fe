@@ -15,3 +15,13 @@ export interface GetAuthDataResponseType {
     user: UserObjectType | null;
     token?: string;
 }
+
+export interface LoginFieldsType {
+    email: string;
+    password: string;
+}
+
+export interface LoginResponseType {
+    user: UserObjectType;
+    token: string;
+}

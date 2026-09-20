@@ -57,6 +57,41 @@ const routes = {
         icon: null,
         title: 'Home',
     }),
+    login: new Route({
+        path: '/login',
+        icon: null,
+        title: 'Sign in',
+    }),
+    admin: new Route({
+        path: '/admin',
+        icon: null,
+        title: 'Dashboard',
+    }),
+    adminProducts: new Route({
+        path: '/admin/products',
+        icon: null,
+        title: 'Products',
+    }),
+    adminProductNew: new Route({
+        path: '/admin/products/new',
+        icon: null,
+        title: 'New product',
+    }),
+    adminProductEdit: new Route({
+        path: '/admin/products/:id',
+        icon: null,
+        title: 'Edit product',
+    }),
+    adminCategories: new Route({
+        path: '/admin/categories',
+        icon: null,
+        title: 'Categories',
+    }),
+    adminStock: new Route({
+        path: '/admin/stock',
+        icon: null,
+        title: 'Stock',
+    }),
 };
 
 export default routes;

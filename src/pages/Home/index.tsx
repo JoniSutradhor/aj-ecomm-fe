@@ -1,16 +1,25 @@
-import { Card, Container, Typography } from '@mui/material';
+import { Navigate } from 'react-router';
+import useAuthUser from 'hooks/useAuthUser';
+import routes from 'routes/index';
+import { UserRoleEnum } from 'types/user';
 
-const Home = () => (
-    <Card sx={{ p: 2 }}>
-        <Container maxWidth="md">
-            <Typography align="center" color="textPrimary" variant="h2">
-                AJ E-Commerce
-            </Typography>
-            <Typography align="center" color="textSecondary" variant="text2">
-                The skeleton is ready. Start building in src/pages.
-            </Typography>
-        </Container>
-    </Card>
-);
+/**
+ * Entry point of the app. The storefront will live here, until it exists
+ * admins are sent to the admin dashboard and everybody else to the login.
+ */
+const Home = () => {
+    const { isRole } = useAuthUser();
+
+    return (
+        <Navigate
+            to={
+                isRole(UserRoleEnum.ADMIN)
+                    ? routes.admin.path
+                    : routes.login.path
+            }
+            replace
+        />
+    );
+};
 
 export default Home;
