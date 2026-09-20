@@ -1,0 +1,42 @@
+{
+    "compilerOptions": {
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+        "target": "es2023",
+        "lib": ["ES2023", "DOM", "DOM.Iterable"],
+        "module": "esnext",
+        "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"],
+        "allowArbitraryExtensions": true,
+        "skipLibCheck": true,
+
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "moduleDetection": "force",
+        "noEmit": true,
+        "jsx": "react-jsx",
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+
+        /* Aliases (single source of truth, also used by Vite and ESLint) */
+        "paths": {
+            "utils/*": ["./src/utils/*"],
+            "components/*": ["./src/components/*"],
+            "core_components/*": ["./src/core_components/*"],
+            "icons/*": ["./src/icons/*"],
+            "hooks/*": ["./src/hooks/*"],
+            "store/*": ["./src/store/*"],
+            "layouts/*": ["./src/layouts/*"],
+            "routes/*": ["./src/routes/*"],
+            "test_utils/*": ["./src/test_utils/*"],
+            "theme/*": ["./src/theme/*"],
+            "pages/*": ["./src/pages/*"],
+            "types/*": ["./src/types/*"],
+            "api/*": ["./src/api/*"]
+        }
+    },
+    "include": ["src"]
+}
